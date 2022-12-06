@@ -1,4 +1,3 @@
-// console.log('111111111111111');
 $(document).ready(function () {
     $('#form').submit(function () {
         let errorcheck = 0;
@@ -325,6 +324,16 @@ $(document).ready(function () {
             $('#old').show();
         }
     });
+    var test = "";
+    var ele = document.getElementsByName('glasses');
+    for (i = 0; i < ele.length; i++)
+        if (ele[i].checked)
+        test = ele[i].value;
+    if (test == 'No') {
+        $('#old').hide();
+    } else if(test == 'Yes'){
+        $('#old').show();
+    }
 
     // it provide current date to max attribute in date type input
     const date = new Date();
@@ -347,15 +356,3 @@ $(document).ready(function () {
 
     
 });
-
-// function for check email exist or not 
-// function emailexist(emai) {
-//     var emai = emai;
-//     $.ajax({
-//         data: {"email": emai},
-//         url: 'emailexist.php',
-//         success: function (response) {
-//             return response;
-//         }
-//     });
-// }

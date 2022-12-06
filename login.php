@@ -126,6 +126,7 @@ if (isset($_POST['update'])) {
     $medication_list = trim($_POST['medication_list']);
     $lastexam = trim($_POST['lastexam']);
     $glasses = trim($_POST['glasses']);
+    $old = "";
     if ($glasses == 'Yes') {
         $old = trim($_POST['old']);
     }
