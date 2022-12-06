@@ -1,17 +1,103 @@
 <?php
-$errorcheck = 1;
-if (isset($_POST['submit'])) {
 
-    // sql connection
-    $servername = 'localhost';
-    $username = 'root';
-    $password = 'password';
-    $database = 'patient_registration_form';
-    $conn = mysqli_connect($servername, $username, $password, $database);
+session_start();
+$servername = "localhost";
+$username = "root";
+$password = "password";
+$database = "patient_registration_form";
+$conn = mysqli_connect($servername, $username, $password, $database);
 
+
+
+$errorcheck = 0;
+if (isset($_POST['login'])) {
+    $email = $emailErr = "";
+    if (empty($_POST["email"])) {
+        $emailErr = "Email is required";
+    } else {
+        $email = $_POST["email"];
+    }
+
+
+    // die('login');
+    if (empty($emailErr)) {
+        // create a connection 
+        // $sql = " SELECT * FROM `user` WHERE `email` = '$email' AND `password` = '$pass' ";
+        $sql = " SELECT * FROM `user` WHERE `email` = '$email' ";
+        $result = mysqli_query($conn, $sql);
+        $num = mysqli_num_rows($result);
+
+
+        // Check for login successfully!
+        if ($num == 1) {
+            $row = mysqli_fetch_array($result);
+            if ($row) {
+                // print_r($row);
+                $_SESSION['id'] = $row['id'];
+                $errorcheck = 1;
+                // echo "success";
+            } else {
+                echo mysqli_error($conn);
+            }
+        } else {
+            echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Success!</strong> Please enter correct details for login...
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+        }
+    }
+}
+
+// getting user data from databse
+$id = $_SESSION['id'];
+$sql = "select*from user where id = $id";
+$data = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($data);
+
+$title = $row['title'];
+$name = $row['name'];
+$address = $row['address'];
+$city = $row['city'];
+$state = $row['state'];
+$zip = $row['zip'];
+$cellphone_p = $row['cellphone_p'];
+$homephone = $row['homephone'];
+$mobilephone = $row['mobilephone'];
+$maritial = $row['maritial'];
+$social = $row['social'];
+$birth = $row['birth'];
+$parents = $row['parents'];
+$referred = $row['referred'];
+$occupation = $row['occupation'];
+$cellphone_s = $row['cellphone_s'];
+$employer = $row['employer'];
+$email = $row['email'];
+
+$medication_p = $row['medication_p'];
+$familydoctor = $row['familydoctor'];
+$smoke = $row['smoke'];
+$medication_list = $row['medication_list'];
+$lastexam = $row['lastexam'];
+$glasses = $row['glasses'];
+$old = $row['old'];
+$familyhistory = $row['familyhistory'];
+$profile2 = $row['profile'];
+
+$insurance_p = $row['insurance_p'];
+$employer_p = $row['employer_p'];
+$insured_p = $row['insured_p'];
+$birth_p = $row['birth_p'];
+$insured_ss_p = $row['insured_ss_p'];
+$insurance_s = $row['insurance_s'];
+$employer_s = $row['employer_s'];
+$insured_s = $row['insured_s'];
+$birth_s = $row['birth_s'];
+$insured_ss_s = $row['insured_ss_s'];
+
+// update query
+if (isset($_POST['update'])) {
     $errorcheck = 0;
-
-    $title_Err = $name_Err = $address_Err = $city_Err = $state_Err = $zip_Err = $cellphone_p_Err = $homephone_Err = $mobilephone_Err = $maritial_Err = $social_Err = $birth_Err = $parents_Err = $referred_Err = $occupation_Err = $cellphone_s_Err = $employer_Err = $email_Err = $medication_p_Err = $familydoctor_Err = $medication_list_Err = $lastexam_Err = $glasses_Err = $familyhistory_Err = $profile_Err = $insurance_p_Err = $employer_p_Err = $insured_p_Err = $birth_p_Err = $insured_ss_p_Err = $insurance_s_Err = $employer_s_Err = $insured_s_Err = $birth_s_Err = $insured_ss_s_Err = "";
+    $title_Err = $name_Err = $address_Err = $city_Err = $state_Err = $zip_Err = $cellphone_p_Err = $homephone_Err = $mobilephone_Err = $maritial_Err = $social_Err = $birth_Err = $parents_Err = $referred_Err = $occupation_Err = $cellphone_s_Err = $employer_Err = $email_Err = $medication_p_Err = $familydoctor = $smoke_Err = $medication_list_Err = $lastexam_Err = $glasses_Err = $familyhistory_Err = $profile_Err = $insurance_p_Err = $employer_p_Err = $insured_p_Err = $birth_p_Err = $insured_ss_p_Err = $insurance_s_Err = $employer_s_Err = $insured_s_Err = $birth_s_Err = $insured_ss_s_Err = "";
 
     //first section 
     $title = trim($_POST['title']);
@@ -32,10 +118,6 @@ if (isset($_POST['submit'])) {
     $occupation = trim($_POST['occupation']);
     $cellphone_s = trim($_POST['cellphone_s']);
     $employer = trim($_POST['employer']);
-    $email = trim($_POST['email']);
-    $sql = " SELECT * FROM `user` WHERE `email` = '$email'";
-    $result = mysqli_query($conn, $sql);
-    $num = mysqli_num_rows($result);
 
     //second section 
     $medication_p = trim($_POST['medication_p']);
@@ -58,8 +140,8 @@ if (isset($_POST['submit'])) {
     $allowed_image_extension = array("png", "jpg", "jpeg");
 
     // written by me
-    $profile = $name . '.' . $imageFileType;
-    $target_file = $target_dir . basename($profile);
+    // $profile = $name . '.' . $imageFileType;
+    // $target_file = $target_dir . basename($profile);
 
     // Third section
     $insurance_p = trim($_POST['insurance_p']);
@@ -171,16 +253,6 @@ if (isset($_POST['submit'])) {
         $employer_Err = "Can't be blank";
         $errorcheck = 1;
     }
-    if (empty($email)) {
-        $email_Err = "Can't be blank";
-        $errorcheck = 1;
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $email_Err = "Invalid email format";
-        $errorcheck = 1;
-    } elseif ($num == 1) {
-        $email_Err = "Email already exist";
-        $errorcheck = 1;
-    }
 
     // second section
     if (empty($medication_p)) {
@@ -211,9 +283,7 @@ if (isset($_POST['submit'])) {
         $familyhistory_Err = "Can't be blank";
         $errorcheck = 1;
     }
-    if (empty($_FILES["profile"]["name"])) {
-        $profile_Err = 'Please select image';
-        $errorcheck = 1;
+    if (empty($profile)) {
     }
     // Check file size
     elseif ($_FILES["profile"]["size"] > 50000) {
@@ -268,18 +338,26 @@ if (isset($_POST['submit'])) {
 
     if ($errorcheck == 0) {
 
+        if (!empty($profile)){
+            move_uploaded_file($_FILES["profile"]["tmp_name"], $target_file);
+        }else{
+            $profile = $profile2;
+        }
+
         // $sql = "INSERT INTO user (name, email, city) 
-        $sql = "INSERT INTO user ( title, name, address, city, state, zip, cellphone_p, homephone, mobilephone, maritial, social, birth, parents, referred, occupation, cellphone_s, employer, email, medication_p, familydoctor, medication_list, lastexam, glasses, old, familyhistory, profile, insurance_p, employer_p, insured_p, birth_p, insured_ss_p, insurance_s, employer_s, insured_s, birth_s, insured_ss_s ) 
-        VALUES ('$title', '$name', '$address', '$city', '$state', '$zip', '$cellphone_p', '$homephone', '$mobilephone', '$maritial', '$social', '$birth', '$parents', '$referred', '$occupation', '$cellphone_s', '$employer', '$email', '$medication_p', '$familydoctor', '$medication_list', '$lastexam', '$glasses', '$old', '$familyhistory', '$profile', '$insurance_p', '$employer_p', '$insured_p', '$birth_p', '$insured_ss_p', '$insurance_s', '$employer_s', '$insured_s', '$birth_s', '$insured_ss_s') ";
+        $sql = "UPDATE user SET `title` = '$title', `name` = '$name', `address` = '$address', `city` = '$city', `state` = '$state', `zip` = '$zip', `cellphone_p` = '$cellphone_p', `homephone` = '$homephone', `mobilephone` = '$mobilephone', `maritial` = '$maritial', `social` = '$social', `birth` = '$birth', `parents` = '$parents', `referred` = '$referred', `occupation` = '$occupation', `cellphone_s` = '$cellphone_s', `employer` = '$employer', `medication_p` = '$medication_p', `familydoctor` = '$familydoctor', `smoke` = '$smoke', `medication_list` = '$medication_list', `lastexam` = '$lastexam', `glasses` = '$glasses', `old` = '$old', `familyhistory` = '$familyhistory', `profile` = '$profile', `insurance_p` = '$insurance_p', `employer_p` = '$employer_p', `insured_p` = '$insured_p', `birth_p` = '$birth_p', `insured_ss_p` = '$insured_ss_p', `insurance_s` = '$insurance_s', `employer_s` = '$employer_s', `insured_s` = '$insured_s', `birth_s` = '$birth_s', `insured_ss_s` ='$insured_ss_s' 
+        WHERE `id` = '$id'";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">You have registered successfully..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">You form is updated successfully..<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
+            $errorcheck = 1;
         } else {
             echo mysqli_error($conn);
         }
     }
 }
+
 ?>
 
 <!doctype html>
@@ -301,7 +379,7 @@ if (isset($_POST['submit'])) {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">logo</a>
+            <a class="navbar-brand" href="#">Logo</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -320,7 +398,7 @@ if (isset($_POST['submit'])) {
                     } else {
                     ?>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="login.php">Signin</a>
+                            <a class="nav-link active" aria-current="page" href="index.php">Signup</a>
                         </li>
 
                     <?php
@@ -331,35 +409,56 @@ if (isset($_POST['submit'])) {
             </div>
         </div>
     </nav>
+
+    <?php
+    if ($errorcheck == 0) {
+    ?>
+        <div class="container mt-5">
+            <h1>Please Login Here</h1>
+            <hr><br>
+            <form class="row g-3" method="post">
+                <div class="col-md-6">
+                    <label for="email" class="form-label">E-Mail</label>
+                    <span class="error">*<?php echo $emailErr; ?></span>
+                    <input type="text" class="form-control" id="email" name="email">
+                </div>
+                <div class="col-12">
+                    <button type="submit" name="login" id="login" class="btn btn-primary">Sign in</button>
+                </div>
+            </form>
+        </div>
+    <?php
+    }
+    ?>
+
     <div class="container" id="hideAfterFormSubmit">
         <?php
         if ($errorcheck == 1) {
         ?>
-
-            <h2 class="form-head">PATIENT REGISTRATION FORM</h2>
+            <h2 class="form-head">PATIENT UPDATE FORM</h2>
             <div class="container mt-4">
                 <form action="" method="post" enctype="multipart/form-data" id="form">
                     <div class="row ms-3 me-3">
                         <div class="col-md-2 c-border cell-blue">Title</div>
                         <div class="col-md-4 c-border cell-l-blue">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title1" name="title" value="Dr.">
+                                <input class="form-check-input" type="radio" id="title1" name="title" <?php echo ($title=='Dr.')?'checked':'' ?> value="Dr.">
                                 <label class="form-check-label" for="title">Dr.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title2" name="title" value="Mr.">
+                                <input class="form-check-input" type="radio" id="title2" name="title" <?php echo ($title=='Mr.')?'checked':'' ?>  value="Mr.">
                                 <label class="form-check-label" for="title">Mr.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title3" name="title" value="Ms.">
+                                <input class="form-check-input" type="radio" id="title3" name="title" <?php echo ($title=='Ms.')?'checked':'' ?> value="Ms.">
                                 <label class="form-check-label" for="title">Ms.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title4" name="title" value="Mrs.">
+                                <input class="form-check-input" type="radio" id="title4" name="title" <?php echo ($title=='Mrs.')?'checked':'' ?> value="Mrs.">
                                 <label class="form-check-label" for="title">Mrs.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title5" name="title" value="Miss">
+                                <input class="form-check-input" type="radio" id="title5" name="title" <?php echo ($title=='Miss.')?'checked':'' ?> value="Miss">
                                 <label class="form-check-label" for="title">Miss</label>
                             </div>
                             <span id="titleErr" class="error" name="error"> <?php echo $title_Err; ?> </span>
@@ -367,15 +466,15 @@ if (isset($_POST['submit'])) {
                         <div class="col-md-2 c-border cell-blue">Marital Status</div>
                         <div class="col-md-4 c-border cell-l-blue">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial1" value="Single">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial1" <?php echo ($maritial=='Single')?'checked':'' ?> value="Single">
                                 <label class="form-check-label" for="maritial">Single</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial2" value="Married">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial2" <?php echo ($maritial=='Married')?'checked':'' ?> value="Married">
                                 <label class="form-check-label" for="maritial">Married</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial3" value="Widowed">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial3" <?php echo ($maritial=='Widowed')?'checked':'' ?> value="Widowed">
                                 <label class="form-check-label" for="maritial">Widowed</label>
                             </div>
                             <span id="maritialErr" class="error" name="error"> <?php echo $maritial_Err; ?> </span>
@@ -383,89 +482,89 @@ if (isset($_POST['submit'])) {
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Name</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="name" name="name" class="input" placeholder="Enter your Name" value="">
+                            <input type="text" value="<?php echo $name; ?>" value="<?php echo $name; ?>" id="name" name="name" class="input" placeholder="Enter your Name" value="">
                             <span id="nameErr" class="error" name="error"> <?php echo $name_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Social Security#</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="social" name="social" class="input" placeholder="Enter Social Security">
+                            <input type="text" value="<?php echo $social; ?>" id="social" name="social" class="input" placeholder="Enter Social Security">
                             <span id="socialErr" class="error" name="error"> <?php echo $social_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Address</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="address" name="address" class="input" placeholder="Enter your address">
+                            <input type="text" value="<?php echo $address; ?>" id="address" name="address" class="input" placeholder="Enter your address">
                             <span id="addressErr" class="error" name="error"> <?php echo $address_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Birth Date</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="date" id="birth" name="birth" class="input" max="2022-11-11">
+                            <input type="date" value="<?php echo $birth; ?>" id="birth" name="birth" class="input" max="2022-11-11">
                             <span id="birthErr" class="error" name="error"> <?php echo $birth_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">City</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="city" name="city" class="input" placeholder="Enter your city">
+                            <input type="text" value="<?php echo $city; ?>" id="city" name="city" class="input" placeholder="Enter your city">
                             <span id="cityErr" class="error" name="error"> <?php echo $city_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Parents/Guardian</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="parents" name="parents" class="input" placeholder="Enter parents/guardian">
+                            <input type="text" value="<?php echo $parents; ?>" id="parents" name="parents" class="input" placeholder="Enter parents/guardian">
                             <span id="parentsErr" class="error" name="error"> <?php echo $parents_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">State </div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="state" name="state" class="input" placeholder="Enter your state">
+                            <input type="text" value="<?php echo $state; ?>" id="state" name="state" class="input" placeholder="Enter your state">
                             <span id="stateErr" class="error" name="error"> <?php echo $state_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Referred By</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="referred" name="referred" class="input" placeholder="Enter your reference">
+                            <input type="text" value="<?php echo $referred; ?>" id="referred" name="referred" class="input" placeholder="Enter your reference">
                             <span id="referredErr" class="error" name="error"> <?php echo $referred_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Zip</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="zip" name="zip" class="input" placeholder="Enter your zipcode">
+                            <input type="text" value="<?php echo $zip; ?>" id="zip" name="zip" class="input" placeholder="Enter your zipcode">
                             <span id="zipErr" class="error" name="error"> <?php echo $zip_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Occupation</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="occupation" name="occupation" class="input" placeholder="Enter your occupation">
+                            <input type="text" value="<?php echo $occupation; ?>" id="occupation" name="occupation" class="input" placeholder="Enter your occupation">
                             <span id="occupationErr" class="error" name="error"> <?php echo $occupation_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Cell Phone</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="cellphone_p" name="cellphone_p" class="input" placeholder="Enter cell phone">
+                            <input type="text" value="<?php echo $cellphone_p; ?>" id="cellphone_p" name="cellphone_p" class="input" placeholder="Enter cell phone">
                             <span id="cellphone_pErr" class="error" name="error"> <?php echo $cellphone_p_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Cell Phone</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="cellphone_s" name="cellphone_s" class="input" placeholder="Enter cell phone">
+                            <input type="text" value="<?php echo $cellphone_s; ?>" id="cellphone_s" name="cellphone_s" class="input" placeholder="Enter cell phone">
                             <span id="cellphone_sErr" class="error" name="error"> <?php echo $cellphone_s_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Home Phone </div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="homephone" name="homephone" class="input" placeholder="Enter home phone">
+                            <input type="text" value="<?php echo $homephone; ?>" id="homephone" name="homephone" class="input" placeholder="Enter home phone">
                             <span id="homephoneErr" class="error" name="error"> <?php echo $homephone_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Employer's Name</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="employer" name="employer" class="input" placeholder="Enter employer name">
+                            <input type="text" value="<?php echo $employer; ?>" id="employer" name="employer" class="input" placeholder="Enter employer name">
                             <span id="employerErr" class="error" name="error"> <?php echo $employer_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Mobile Phone</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="mobilephone" name="mobilephone" class="input" placeholder="Enter mobile phone">
+                            <input type="text" value="<?php echo $mobilephone; ?>" id="mobilephone" name="mobilephone" class="input" placeholder="Enter mobile phone">
                             <span id="mobilephoneErr" class="error" name="error"> <?php echo $mobilephone_Err; ?> </span>
                         </div>
                         <div class="col-md-2 c-border cell-blue">Employer's Email</div>
                         <div class="col-md-4 c-border cell-l-blue">
-                            <input type="text" id="email" name="email" class="input" placeholder="Enter Employer email">
+                            <input type="text" value="<?php echo $email; ?>" id="email" name="email" class="input" placeholder="Enter Employer email" disabled>
                             <span id="emailErr" class="error" name="error"> <?php echo $email_Err; ?> </span>
                         </div>
                     </div>
@@ -477,24 +576,24 @@ if (isset($_POST['submit'])) {
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Medications are you presently taking</div>
                             <div class="col-md-8 c-border cell-l-blue">
-                                <textarea id="medication_p" name="medication_p" cols="30" rows="1" class="input" placeholder="Enter your present medications"></textarea>
+                                <textarea value="" id="medication_p" name="medication_p" cols="30" rows="1" class="input" placeholder="<?php echo $medication_p; ?>"><?php echo $medication_p; ?></textarea>
                                 <span id="medication_pErr" class="error" name="error"> <?php echo $medication_p_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Name of family docter</div>
                             <div class="col-md-8 c-border cell-l-blue">
-                                <input type="text" id="familydoctor" name="familydoctor" class="input" placeholder="Enter your family doctor name">
+                                <input type="text" value="<?php echo $familydoctor; ?>" id="familydoctor" name="familydoctor" class="input" placeholder="Enter your family doctor name">
                                 <span id="familydoctorErr" class="error" name="error"> <?php echo $familydoctor_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Do you smoke?</div>
                             <div class="col-md-8 c-border cell-l-blue">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="smoke1" name="smoke" value="Yes">
+                                    <input class="form-check-input" type="radio" id="smoke1" <?php echo ($smoke=='Yes')?'checked':'' ?> name="smoke" value="Yes">
                                     <label class="form-check-label" for="smoke">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="smoke2" name="smoke" value="No">
+                                    <input class="form-check-input" type="radio" id="smoke2" <?php echo ($smoke=='No')?'checked':'' ?> name="smoke" value="No">
                                     <label class="form-check-label" for="smoke">No</label>
                                 </div>
                                 <span id="smokeErr" class="error" name="error"> <?php echo $smoke_Err; ?> </span>
@@ -502,40 +601,41 @@ if (isset($_POST['submit'])) {
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">List any allergies to medications</div>
                             <div class="col-md-8 c-border cell-l-blue">
-                                <textarea id="medication_list" name="medication_list" cols="30" rows="1" class="input" placeholder="Enter allergies Medication list"></textarea>
+                                <textarea value="" id="medication_list" name="medication_list" cols="30" rows="1" class="input" placeholder="<?php echo $medication_list; ?>"><?php echo $medication_list; ?></textarea>
                                 <span id="medication_listErr" class="error" name="error"> <?php echo $medication_list_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Date of last exam</div>
                             <div class="col-md-8 c-border cell-l-blue">
-                                <input type="date" id="lastexam" name="lastexam" class="input" max="">
+                                <input type="date" value="<?php echo $lastexam; ?>" id="lastexam" name="lastexam" class="input" max="">
                                 <span id="lastexamErr" class="error" name="error"> <?php echo $lastexam_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Did you ever where glasses or contact lenses?</div>
                             <div class="col-md-8 c-border cell-l-blue">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="glasses1" name="glasses" value="Yes">
+                                    <input class="form-check-input" type="radio" id="glasses1" <?php echo ($glasses=='Yes')?'checked':'' ?> name="glasses" value="Yes">
                                     <label class="form-check-label" for="glasses">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="glasses2" name="glasses" value="No">
+                                    <input class="form-check-input" type="radio" id="glasses2" <?php echo ($glasses=='No')?'checked':'' ?> name="glasses" value="No">
                                     <label class="form-check-label" for="glasses">No</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input style="display: none;" type="text" name="old" id="old" placeholder="How old are they?">
+                                    <input value="<?php echo $old; ?>" style="display: none;" type="text" name="old" id="old" placeholder="How old are they?">
                                 </div>
                                 <span id="glassesErr" class="error" name="error"> <?php echo $glasses_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Family history of eye disorders</div>
                             <div class="col-md-8 c-border cell-l-blue">
-                                <textarea id="familyhistory" name="familyhistory" cols="30" rows="1" class="input" placeholder="Enter family history of eye disorders"></textarea>
+                                <textarea value="" id="familyhistory" name="familyhistory" cols="30" rows="1" class="input" placeholder="<?php echo $familyhistory; ?>"><?php echo $familyhistory; ?></textarea>
                                 <span id="familyhistoryErr" class="error" name="error"> <?php echo $familyhistory_Err; ?> </span>
                             </div>
                             <div class="col-md-4 c-border cell-blue">Profile Pic</div>
                             <div class="col-md-8 c-border cell-l-blue">
                                 <input type="file" id="profile" name="profile" class="input" accept="image/png, image/jpg, image/jpeg" placeholder="Select profile pic">
+                                <img src="assets/images/<?php echo $profile2; ?>" alt="">
                                 <span id="profileErr" class="error" name="error"> <?php echo $profile_Err; ?> </span>
                             </div>
                         </div>
@@ -547,145 +647,64 @@ if (isset($_POST['submit'])) {
                             <div class="w-100"></div>
                             <div class="col-md-2 c-border cell-blue">Insurance Name</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insurance_p" name="insurance_p" class="input" placeholder="Enter insurance name">
+                                <input type="text" value="<?php echo $insurance_p; ?>" id="insurance_p" name="insurance_p" class="input" placeholder="Enter insurance name">
                                 <span id="insurance_pErr" class="error" name="error"> <?php echo $insurance_p_Err; ?> </span>
                             </div>
                             <div class="col-md-2 c-border cell-blue">Insurance Name</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insurance_s" name="insurance_s" class="input" placeholder="Enter insurance name">
+                                <input type="text" value="<?php echo $insurance_s; ?>" id="insurance_s" name="insurance_s" class="input" placeholder="Enter insurance name">
                                 <span id="insurance_sErr" class="error" name="error"> <?php echo $insurance_s_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-2 c-border cell-blue">Employer</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="employer_p" name="employer_p" class="input" placeholder="Enter employer name">
+                                <input type="text" value="<?php echo $employer_p; ?>" id="employer_p" name="employer_p" class="input" placeholder="Enter employer name">
                                 <span id="employer_pErr" class="error" name="error"> <?php echo $employer_p_Err; ?> </span>
                             </div>
                             <div class="col-md-2 c-border cell-blue">Employer</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="employer_s" name="employer_s" class="input" placeholder="Enter employer name">
+                                <input type="text" value="<?php echo $employer_s; ?>" id="employer_s" name="employer_s" class="input" placeholder="Enter employer name">
                                 <span id="employer_sErr" class="error" name="error"> <?php echo $employer_s_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-2 c-border cell-blue">Insured's Name</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insured_p" name="insured_p" class="input" placeholder="Enter insured name">
+                                <input type="text" value="<?php echo $insured_p; ?>" id="insured_p" name="insured_p" class="input" placeholder="Enter insured name">
                                 <span id="insured_pErr" class="error" name="error"> <?php echo $insured_p_Err; ?> </span>
                             </div>
                             <div class="col-md-2 c-border cell-blue">Insured's Name</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insured_s" name="insured_s" class="input" placeholder="Enter insured name">
+                                <input type="text" value="<?php echo $insured_s; ?>" id="insured_s" name="insured_s" class="input" placeholder="Enter insured name">
                                 <span id="insured_sErr" class="error" name="error"> <?php echo $insured_s_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-2 c-border cell-blue">Birth Date</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="date" id="birth_p" name="birth_p" class="input" max="2022-11-29">
+                                <input type="date" value="<?php echo $birth_p; ?>" id="birth_p" name="birth_p" class="input" max="2022-11-29">
                                 <span id="birth_pErr" class="error" name="error"> <?php echo $birth_p_Err; ?> </span>
                             </div>
                             <div class="col-md-2 c-border cell-blue">Birth Date</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="date" id="birth_s" name="birth_s" class="input" max="2022-11-29">
+                                <input type="date" value="<?php echo $birth_s; ?>" id="birth_s" name="birth_s" class="input" max="2022-11-29">
                                 <span id="birth_sErr" class="error" name="error"> <?php echo $birth_s_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-2 c-border cell-blue">Insured's SS#</div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insured_ss_p" name="insured_ss_p" class="input" placeholder="Enter insured ss">
+                                <input type="text" value="<?php echo $insured_ss_p; ?>" id="insured_ss_p" name="insured_ss_p" class="input" placeholder="Enter insured ss">
                                 <span id="insured_ss_pErr" class="error" name="error"> <?php echo $insured_ss_p_Err; ?> </span>
                             </div>
                             <div class="col-md-2 c-border cell-blue">Insured's SS# </div>
                             <div class="col-md-4 c-border cell-l-blue">
-                                <input type="text" id="insured_ss_s" name="insured_ss_s" class="input" placeholder="Enter insured ss">
+                                <input type="text" value="<?php echo $insured_ss_s; ?>" id="insured_ss_s" name="insured_ss_s" class="input" placeholder="Enter insured ss">
                                 <span id="insured_ss_sErr" class="error" name="error"> <?php echo $insured_ss_s_Err; ?> </span>
                             </div>
                         </div>
                     </div>
                     <div class="container btn-div mb-2">
-                        <button type="submit" class="btn" name="submit" id="submit">Submit</button>
+                        <button type="submit" class="btn" name="update" id="update">Update</button>
                     </div>
                 </form>
-            </div>
-        <?php
-        }
-        ?>
-    </div>
-
-    <!-- *********************Show after form submit********************* -->
-    <div class="container showafter mt-4" id="showAfterFormSubmit">
-        <?php
-        if ($errorcheck == 0) {
-            // die('1111111111111111111');
-        ?>
-            <h3 class="output">Your form is submitted successfully..</h3>
-            <hr>
-            <div class="container mt-4">
-                <?php
-                if (move_uploaded_file($_FILES["profile"]["tmp_name"], $target_file)) {
-                    echo '<img src="' . $target_file . '" alt="" style="height: 500px; width: 800px"><br><br>';
-                } else {
-                    $profile_Err = 'Sorry, there was an error uploading your file.';
-                }
-                ?>
-            </div>
-            <hr>
-            <div class="container mt-4">
-                <div class="row">
-                    <div class="col-md-6">
-                        Title: <span id="your_title" class="output"> <?php echo $title; ?> </span> <br>
-                        Name: <span id="your_name" class="output"> <?php echo $name; ?> </span> <br>
-                        Address: <span id="your_address" class="output"> <?php echo $address; ?> </span> <br>
-                        City: <span id="your_city" class="output"> <?php echo $city; ?> </span> <br>
-                        State: <span id="your_state" class="output"> <?php echo $state; ?> </span> <br>
-                        Zip: <span id="your_zip" class="output"> <?php echo $zip; ?> </span> <br>
-                        Cell Phone: <span id="your_cellphone_p" class="output"> <?php echo $cellphone_p; ?> </span> <br>
-                        Home Phone: <span id="your_homephone" class="output"> <?php echo $homephone; ?> </span> <br>
-                        Mobile Phone: <span id="your_mobilephone" class="output"> <?php echo $mobilephone; ?> </span> <br>
-                    </div>
-                    <div class="col-md-6">
-                        Maritial Status: <span id="your_maritial" class="output"> <?php echo $maritial; ?> </span> <br>
-                        Social Security: <span id="your_social" class="output"> <?php echo $social; ?> </span> <br>
-                        Birth Date: <span id="your_birth" class="output"> <?php echo $birth; ?> </span> <br>
-                        Parents/Guardian: <span id="your_parents" class="output"> <?php echo $parents; ?> </span> <br>
-                        Referred By: <span id="your_referred" class="output"> <?php echo $referred; ?> </span> <br>
-                        Occupation: <span id="your_occupation" class="output"> <?php echo $occupation; ?> </span> <br>
-                        Cell phone: <span id="your_cellphone_s" class="output"> <?php echo $cellphone_s; ?> </span> <br>
-                        Employer's Name: <span id="your_employer" class="output"> <?php echo $employer; ?> </span> <br>
-                        Employer's Email: <span id="your_email" class="output"> <?php echo $email; ?> </span> <br>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="container mt-4">
-                <span style="font-weight: bold">Other Condition(s) <?php echo $title; ?> </span><br>
-                Medication are you presen taking: <span id="your_medication_p" class="output"> <?php echo $medication_p; ?> </span> <br>
-                Name of family doctor: <span id="your_familydoctor" class="output"> <?php echo $familydoctor; ?> </span> <br>
-                Do you smoke?: <span id="your_smoke" class="output"> <?php echo $smoke; ?> </span> <br>
-                List any allergies to medications: <span id="your_medication_list" class="output"> <?php echo $medication_list; ?> </span> <br>
-                Date of last exam: <span id="your_lastexam" class="output"> <?php echo $lastexam; ?> </span> <br>
-                Did you ever where glasses or contact lenses?: <span id="your_glasses" class="output"> <?php echo $glasses; ?> </span>
-                <span id="your_old" class="old"> <?php echo $old; ?> </span> <br>
-                Family history of eye disorders: <span id="your_familyhistory" class="output"> <?php echo $familyhistory; ?> </span> <br>
-                Profile Pic: <span id="your_profile" class="output"> <?php echo $profile; ?> </span> <br>
-            </div>
-            <hr>
-            <div class="container mt-4 mb-2">
-                <div class="row">
-                    <div class="col-md-6">
-                        Insurance Name: <span id="your_insurance_p" class="output"> <?php echo $insurance_p; ?> </span> <br>
-                        Employer: <span id="your_employer_p" class="output"> <?php echo $employer_p; ?> </span> <br>
-                        Insured's Name: <span id="your_insured_p" class="output"> <?php echo $insured_p; ?> </span> <br>
-                        Birth Date: <span id="your_birth_p" class="output"> <?php echo $birth_p; ?> </span> <br>
-                        Insured's SS#: <span id="your_insured_ss_p" class="output"> <?php echo $insured_ss_p; ?> </span> <br>
-                    </div>
-                    <div class="col-md-6">
-                        Insurance Name: <span id="your_insurance_s" class="output"> <?php echo $insurance_s; ?> </span> <br>
-                        Employer: <span id="your_employer_s" class="output"> <?php echo $employer_s; ?> </span> <br>
-                        Insured's Name: <span id="your_insured_s" class="output"> <?php echo $insured_s; ?> </span> <br>
-                        Birth Date: <span id="your_birth_s" class="output"> <?php echo $birth_s; ?> </span> <br>
-                        Insured's SS#: <span id="your_insured_ss_s" class="output"> <?php echo $insured_ss_s; ?> </span> <br>
-                    </div>
-                </div>
             </div>
         <?php
         }

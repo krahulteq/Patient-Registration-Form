@@ -57,6 +57,7 @@ $(document).ready(function () {
         employer = employer.trim();
         var email = $("#email").val();
         email = email.trim();
+        // var emailexist = emailexist(email);
         var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
         //second section 
@@ -81,9 +82,9 @@ $(document).ready(function () {
             if (ele[i].checked)
                 glasses = ele[i].value;
 
-        if(glasses == "yes"){
-        var old = $("#old").val();
-        old = old.trim();
+        if (glasses == "yes") {
+            var old = $("#old").val();
+            old = old.trim();
         }
 
         var familyhistory = $("#familyhistory").val();
@@ -94,8 +95,7 @@ $(document).ready(function () {
         var fileToUpload = fileInput.val();
         var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
         if (fileToUpload == "") {
-            $('#profileErr').html("Please select Image");
-            errorcheck = 1;
+            
         } else if (!allowedExtensions.exec(fileToUpload)) {
             $('#profileErr').html("Sorry, only JPG, JPEG & PNG files are allowed.");
             errorcheck = 1;
@@ -235,7 +235,9 @@ $(document).ready(function () {
         } else if (!email.match(validRegex)) {
             $('#emailErr').html("Invalid email format");
             errorcheck = 1;
-
+        // } else if (emailexist == 1) {
+        //     $('#emailErr').html("Email already exist");
+        //     errorcheck = 1;
         }
         if (medication_p == null || medication_p == "") {
             $('#medication_pErr').html("Can't be blank");
@@ -328,18 +330,32 @@ $(document).ready(function () {
     const date = new Date();
 
     var day = date.getDate();
-    if(day.toString().length == 1){
-        day = '0'+day;
+    if (day.toString().length == 1) {
+        day = '0' + day;
     }
     let month = date.getMonth() + 1;
-    if(month.toString().length == 1){
-        month = '0'+month;
+    if (month.toString().length == 1) {
+        month = '0' + month;
     }
-    let year = date.getFullYear()-18;
+    let year = date.getFullYear() - 18;
     let currentDate = `${year}-${month}-${day}`;
     console.log(currentDate);
     document.getElementById('birth').setAttribute('max', currentDate)
     document.getElementById('lastexam').setAttribute('max', currentDate)
     document.getElementById('birth_p').setAttribute('max', currentDate)
     document.getElementById('birth_s').setAttribute('max', currentDate)
+
+    
 });
+
+// function for check email exist or not 
+// function emailexist(emai) {
+//     var emai = emai;
+//     $.ajax({
+//         data: {"email": emai},
+//         url: 'emailexist.php',
+//         success: function (response) {
+//             return response;
+//         }
+//     });
+// }
