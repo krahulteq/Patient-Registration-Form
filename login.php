@@ -340,6 +340,7 @@ if (isset($_POST['update'])) {
 
         if (!empty($profile)){
             move_uploaded_file($_FILES["profile"]["tmp_name"], $target_file);
+            $profile2 = $profile;
         }else{
             $profile = $profile2;
         }
