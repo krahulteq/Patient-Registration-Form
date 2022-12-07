@@ -84,7 +84,6 @@ $(document).ready(function () {
         if (glasses == "Yes") {
             var old = $("#old").val();
             old = old.trim();
-            old = old.trim();
             if ( old == null || old == "") {
                 $('#oldErr').html("Can't be blank");
                 errorcheck = 1;
