@@ -129,7 +129,7 @@ if (isset($_POST['update'])) {
     $old = "";
     if ($glasses == 'Yes') {
         $old = trim($_POST['old']);
-        if(empty($old)){
+        if (empty($old)) {
             $old_Err = "Can't be blank";
             $errorcheck = 1;
         }
@@ -343,10 +343,10 @@ if (isset($_POST['update'])) {
 
     if ($errorcheck == 0) {
 
-        if (!empty($profile)){
+        if (!empty($profile)) {
             move_uploaded_file($_FILES["profile"]["tmp_name"], $target_file);
             $profile2 = $profile;
-        }else{
+        } else {
             $profile = $profile2;
         }
 
@@ -448,23 +448,23 @@ if (isset($_POST['update'])) {
                         <div class="col-md-2 c-border cell-blue">Title</div>
                         <div class="col-md-4 c-border cell-l-blue">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title1" name="title" <?php echo ($title=='Dr.')?'checked':'' ?> value="Dr.">
+                                <input class="form-check-input" type="radio" id="title1" name="title" <?php echo ($title == 'Dr.') ? 'checked' : '' ?> value="Dr.">
                                 <label class="form-check-label" for="title">Dr.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title2" name="title" <?php echo ($title=='Mr.')?'checked':'' ?>  value="Mr.">
+                                <input class="form-check-input" type="radio" id="title2" name="title" <?php echo ($title == 'Mr.') ? 'checked' : '' ?> value="Mr.">
                                 <label class="form-check-label" for="title">Mr.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title3" name="title" <?php echo ($title=='Ms.')?'checked':'' ?> value="Ms.">
+                                <input class="form-check-input" type="radio" id="title3" name="title" <?php echo ($title == 'Ms.') ? 'checked' : '' ?> value="Ms.">
                                 <label class="form-check-label" for="title">Ms.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title4" name="title" <?php echo ($title=='Mrs.')?'checked':'' ?> value="Mrs.">
+                                <input class="form-check-input" type="radio" id="title4" name="title" <?php echo ($title == 'Mrs.') ? 'checked' : '' ?> value="Mrs.">
                                 <label class="form-check-label" for="title">Mrs.</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="title5" name="title" <?php echo ($title=='Miss.')?'checked':'' ?> value="Miss">
+                                <input class="form-check-input" type="radio" id="title5" name="title" <?php echo ($title == 'Miss.') ? 'checked' : '' ?> value="Miss">
                                 <label class="form-check-label" for="title">Miss</label>
                             </div>
                             <span id="titleErr" class="error" name="error"> <?php echo $title_Err; ?> </span>
@@ -472,15 +472,15 @@ if (isset($_POST['update'])) {
                         <div class="col-md-2 c-border cell-blue">Marital Status</div>
                         <div class="col-md-4 c-border cell-l-blue">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial1" <?php echo ($maritial=='Single')?'checked':'' ?> value="Single">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial1" <?php echo ($maritial == 'Single') ? 'checked' : '' ?> value="Single">
                                 <label class="form-check-label" for="maritial">Single</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial2" <?php echo ($maritial=='Married')?'checked':'' ?> value="Married">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial2" <?php echo ($maritial == 'Married') ? 'checked' : '' ?> value="Married">
                                 <label class="form-check-label" for="maritial">Married</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="maritial" id="maritial3" <?php echo ($maritial=='Widowed')?'checked':'' ?> value="Widowed">
+                                <input class="form-check-input" type="radio" name="maritial" id="maritial3" <?php echo ($maritial == 'Widowed') ? 'checked' : '' ?> value="Widowed">
                                 <label class="form-check-label" for="maritial">Widowed</label>
                             </div>
                             <span id="maritialErr" class="error" name="error"> <?php echo $maritial_Err; ?> </span>
@@ -528,7 +528,6 @@ if (isset($_POST['update'])) {
                         <div class="col-md-4 c-border cell-l-blue">
                             <input type="text" value="<?php echo $referred; ?>" id="referred" name="referred" class="input" placeholder="Enter your reference">
                             <span id="referredErr" class="error" name="error"> <?php echo $referred_Err; ?> </span>
-                            <span id="oldErr" class="error" name="error"> <?php echo $old_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Zip</div>
@@ -596,11 +595,11 @@ if (isset($_POST['update'])) {
                             <div class="col-md-4 c-border cell-blue">Do you smoke?</div>
                             <div class="col-md-8 c-border cell-l-blue">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="smoke1" <?php echo ($smoke=='Yes')?'checked':'' ?> name="smoke" value="Yes">
+                                    <input class="form-check-input" type="radio" id="smoke1" <?php echo ($smoke == 'Yes') ? 'checked' : '' ?> name="smoke" value="Yes">
                                     <label class="form-check-label" for="smoke">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="smoke2" <?php echo ($smoke=='No')?'checked':'' ?> name="smoke" value="No">
+                                    <input class="form-check-input" type="radio" id="smoke2" <?php echo ($smoke == 'No') ? 'checked' : '' ?> name="smoke" value="No">
                                     <label class="form-check-label" for="smoke">No</label>
                                 </div>
                                 <span id="smokeErr" class="error" name="error"> <?php echo $smoke_Err; ?> </span>
@@ -621,17 +620,18 @@ if (isset($_POST['update'])) {
                             <div class="col-md-4 c-border cell-blue">Did you ever where glasses or contact lenses?</div>
                             <div class="col-md-8 c-border cell-l-blue">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="glasses1" <?php echo ($glasses=='Yes')?'checked':'' ?> name="glasses" value="Yes">
+                                    <input class="form-check-input" type="radio" id="glasses1" <?php echo ($glasses == 'Yes') ? 'checked' : '' ?> name="glasses" value="Yes">
                                     <label class="form-check-label" for="glasses">Yes</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" id="glasses2" <?php echo ($glasses=='No')?'checked':'' ?> name="glasses" value="No">
+                                    <input class="form-check-input" type="radio" id="glasses2" <?php echo ($glasses == 'No') ? 'checked' : '' ?> name="glasses" value="No">
                                     <label class="form-check-label" for="glasses">No</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input value="<?php echo $old; ?>" style="display: none;" type="text" name="old" id="old" placeholder="How old are they?">
                                 </div>
                                 <span id="glassesErr" class="error" name="error"> <?php echo $glasses_Err; ?> </span>
+                                <span id="oldErr" class="error" name="error"> <?php echo $old_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Family history of eye disorders</div>
