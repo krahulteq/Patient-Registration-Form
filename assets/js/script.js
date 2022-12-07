@@ -81,9 +81,14 @@ $(document).ready(function () {
             if (ele[i].checked)
                 glasses = ele[i].value;
 
-        if (glasses == "yes") {
+        if (glasses == "Yes") {
             var old = $("#old").val();
             old = old.trim();
+            old = old.trim();
+            if ( old == null || old == "") {
+                $('#oldErr').html("Can't be blank");
+                errorcheck = 1;
+            }
         }
 
         var familyhistory = $("#familyhistory").val();
@@ -331,6 +336,7 @@ $(document).ready(function () {
         test = ele[i].value;
     if (test == 'No') {
         $('#old').hide();
+        $('#oldErr').html("");
     } else if(test == 'Yes'){
         $('#old').show();
     }

@@ -46,6 +46,10 @@ if (isset($_POST['submit'])) {
     $glasses = trim($_POST['glasses']);
     if ($glasses == 'Yes') {
         $old = trim($_POST['old']);
+        if(empty($old)){
+            $old_Err = "Can't be blank";
+            $errorcheck = 1;
+        }
     }
     $familyhistory = trim($_POST['familyhistory']);
 
@@ -526,6 +530,7 @@ if (isset($_POST['submit'])) {
                                     <input style="display: none;" type="text" name="old" id="old" placeholder="How old are they?">
                                 </div>
                                 <span id="glassesErr" class="error" name="error"> <?php echo $glasses_Err; ?> </span>
+                                <span id="oldErr" class="error" name="error"> <?php echo $old_Err; ?> </span>
                             </div>
                             <div class="w-100"></div>
                             <div class="col-md-4 c-border cell-blue">Family history of eye disorders</div>

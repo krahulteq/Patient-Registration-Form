@@ -129,6 +129,10 @@ if (isset($_POST['update'])) {
     $old = "";
     if ($glasses == 'Yes') {
         $old = trim($_POST['old']);
+        if(empty($old)){
+            $old_Err = "Can't be blank";
+            $errorcheck = 1;
+        }
     }
     $familyhistory = trim($_POST['familyhistory']);
 
@@ -524,6 +528,7 @@ if (isset($_POST['update'])) {
                         <div class="col-md-4 c-border cell-l-blue">
                             <input type="text" value="<?php echo $referred; ?>" id="referred" name="referred" class="input" placeholder="Enter your reference">
                             <span id="referredErr" class="error" name="error"> <?php echo $referred_Err; ?> </span>
+                            <span id="oldErr" class="error" name="error"> <?php echo $old_Err; ?> </span>
                         </div>
                         <div class="w-100"></div>
                         <div class="col-md-2 c-border cell-blue">Zip</div>
